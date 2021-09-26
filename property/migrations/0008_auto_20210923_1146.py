@@ -7,8 +7,10 @@ import phonenumbers
 def fill_owners_pure_phonenumber_field(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     for flat in Flat.objects.all():
-        flat.owners_pure_phonenumber = phonenumbers.parse(flat.owners_phonenumber, 'RU')
-        flat.save()
+        pure_phonenumber = phonenumbers.parse(flat.owners_phonenumber, 'RU')
+        if phonenumbers.is_valid_number(pure_phonenumber):
+            flat.owners_pure_phonenumber = pure_phonenumber
+            flat.save()
 
 
 def roll_back(apps, schema_editor):
